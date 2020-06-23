@@ -58,3 +58,16 @@ with fs.open('bucketname/' + file_name, 'rb') as f:
     val = arr[0:1000]
 
 ```
+
+## Use with nwbwidgets
+
+```python
+
+# In a jupyter notebook:
+from nwbwidgets import nwb2widget
+f = with fs.open('bucketname/' + file_name, 'rb')
+hdf5_zarr = HDF5Zarr(f, store = store, store_mode = 'r')
+zgroup = hdf5_zarr.zgroup
+nwb2widget(zgroup)
+
+```
