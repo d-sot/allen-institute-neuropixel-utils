@@ -14,7 +14,7 @@ $ pip install git+https://github.com/catalystneuro/HDF5Zarr.git
 
 ## Reading local data
 HDF5Zarr can be used to read a local HDF5 file where the datasets are actually read using the Zarr library.
-Donwload example dataset from from https://girder.dandiarchive.org/api/v1/item/5eda859399f25d97bd27985d/download
+Donwload example dataset from https://girder.dandiarchive.org/api/v1/item/5eda859399f25d97bd27985d/download
 ```python
 import zarr
 from hdf5zarr import HDF5Zarr
@@ -40,7 +40,15 @@ arr = zgroup['units/spike_times']
 val = arr[0:1000]
 ```
 
-Once you have a zgroup object, this object can be read by PyNWB using the 
+Export metadata from zarr store to a single json file
+```python
+import json
+metadata_file = 'metadata'
+with open(metadata_file, 'w') as f:
+    json.dump(zgroup.store.meta_store, f)
+```
+
+Once you have a zgroup object, this object can be read by PyNWB using
 ```python
 from hdf5zarr import NWBZARRHDF5IO
 io = NWBZARRHDF5IO(mode='r+', file=zgroup)     
@@ -56,6 +64,11 @@ from hdf5zarr import NWBZARRHDF5IO
 fs = s3fs.S3FileSystem(anon=True)
 
 f = fs.open('dandiarchive/girder-assetstore/4f/5a/4f5a24f7608041e495c85329dba318b7', 'rb')
+
+# import metadata from a json file
+with open(metadata_file, 'r') as f:
+    store = json.load(f)
+
 hdf5_zarr = HDF5Zarr(f, store = store, store_mode = 'r')
 zgroup = hdf5_zarr.zgroup
 io = NWBZARRHDF5IO(mode='r', file=zgroup, load_namespaces=True)
@@ -80,4 +93,16 @@ hdf5_zarr = HDF5Zarr(f, store = store, store_mode = 'r')
 zgroup = hdf5_zarr.zgroup
 io = NWBZARRHDF5IO(mode='r', file=zgroup, load_namespaces=True)
 nwb = io.read()
+```
+
+
+## Use with nwbwidgets
+
+```python
+
+# In a jupyter notebook:
+from nwbwidgets import nwb2widget
+io = NWBZARRHDF5IO(mode='r', file=zgroup, load_namespaces=True)
+nwb = io.read()
+nwb2widget(nwb)
 ```
