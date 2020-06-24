@@ -1,16 +1,24 @@
 from setuptools import setup, find_packages
 
-with open('requirements.txt', "r") as f:
-    install_requires = f.read().split()
+install_requires = ['numpy',
+                    'cython',
+                    'pkgconfig',
+                    'zarr',
+                    'numcodecs',
+                    'h5py @ git+https://github.com/h5py/h5py.git',
+                    'fsspec',
+                    's3fs',
+                    'hdmf @ git+https://github.com/hdmf-dev/hdmf.git@hdf5io_handle_file_obj',
+                    'nwbwidgets']
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="allen-institute-neuropixel-utils",
-    version=0.1,
-    url="https://github.com/catalystneuro/allen-institute-neuropixel-utils",
-    description="allen-institute-neuropixel-utils",
+    name="HDF5Zarr",
+    version=0.2,
+    url="https://github.com/catalystneuro/HDF5Zarr",
+    description="HDF5Zarr",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Daniel Sotoude, Ben Dichter",
